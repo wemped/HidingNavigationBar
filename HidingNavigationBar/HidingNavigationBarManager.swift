@@ -157,7 +157,13 @@ open class HidingNavigationBarManager: NSObject, UIScrollViewDelegate, UIGesture
 	}
 	
 	open func viewWillDisappear(_ animated: Bool) {
-		expand()
+        if animated {
+            UIView.animate(withDuration: 0.1, animations: { 
+                self.expand()
+            })
+        } else {
+            expand()
+        }
 	}
 	
 	open func updateValues()	{
