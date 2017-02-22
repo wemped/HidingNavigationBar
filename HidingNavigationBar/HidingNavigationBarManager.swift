@@ -158,7 +158,7 @@ open class HidingNavigationBarManager: NSObject, UIScrollViewDelegate, UIGesture
 	
 	open func viewWillDisappear(_ animated: Bool) {
         if animated {
-            UIView.animate(withDuration: 0.1, animations: { 
+            UIView.animate(withDuration: 0.3, animations: {
                 self.expand()
             })
         } else {
@@ -353,7 +353,11 @@ open class HidingNavigationBarManager: NSObject, UIScrollViewDelegate, UIGesture
 	fileprivate func updateScrollContentInsetTop(_ top: CGFloat){
         if viewController.automaticallyAdjustsScrollViewInsets {
             if let topConstraint = topConstraint {
+                let dy = topConstraint.constant - top
                 topConstraint.constant = top
+                var contentOffset = scrollView.contentOffset
+                contentOffset.y = contentOffset.y - dy
+                scrollView.contentOffset = contentOffset
             } else {
                 var contentInset = scrollView.contentInset
                 contentInset.top = top
@@ -389,12 +393,11 @@ open class HidingNavigationBarManager: NSObject, UIScrollViewDelegate, UIGesture
 			
 			let contentInset = scrollView.contentInset
 			let top = contentInset.top + deltaY
-			
-			UIView.animate(withDuration: 0.2, animations: {
-				self.updateScrollContentInsetTop(top)
-				self.scrollView.contentOffset = newContentOffset
-                self.topConstraint?.constant = top
-			})
+			UIView.animate(withDuration: 0.2, delay: 0.0, options: .allowUserInteraction, animations: { 
+                self.updateScrollContentInsetTop(top)
+//                self.scrollView.contentOffset = newContentOffset
+                self.viewController.view.layoutIfNeeded()
+            }, completion: nil)
             
             previousYOffset = CGFloat.nan
 		}
