@@ -194,10 +194,15 @@ open class HidingNavigationBarManager: NSObject, UIScrollViewDelegate, UIGesture
 	
 	open func shouldScrollToTop(){
 		// update content Inset
-		let top = statusBarHeight() + navBarController.totalHeight()
-		updateScrollContentInsetTop(top)
-
-		_ = navBarController.snap(false, completion: nil)
+        let deltaY = navBarController.snap(false, completion: nil)
+        let top = scrollView.contentInset.top + deltaY
+//		let top = statusBarHeight() + navBarController.totalHeight()
+        UIView.animate(withDuration: 0.2, delay: 0.0, options: .allowUserInteraction, animations: {
+            self.updateScrollContentInsetTop(top)
+            self.viewController.view.layoutIfNeeded()
+        }, completion: nil)
+//		updateScrollContentInsetTop(top)
+//		_ = navBarController.snap(false, completion: nil)
 		_ = tabBarController?.snap(false, completion: nil)
 	}
 	
