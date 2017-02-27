@@ -164,19 +164,23 @@ class HidingViewController {
 	// MARK: - Private methods
 	
 	fileprivate func updateSubviewsToAlpha(_ alpha: CGFloat) {
-		if navSubviews == nil {
+//		if navSubviews == nil {
 			navSubviews = []
 			
 			// loops through and subview and save the visible ones in navSubviews array
 			for subView in view.subviews {
 				let isBackgroundView = subView === view.subviews[0]
 				let isViewHidden = subView.isHidden || Float(subView.alpha) < FLT_EPSILON
+                if subView.tag == 6969420 {
+                    subView.alpha = alpha
+                    subView.isHidden = false
+                }
 				
-				if isBackgroundView == false && isViewHidden == false {
+				if (isBackgroundView == false && isViewHidden == false) || subView.tag == 6969420 {
 					navSubviews?.append(subView)
 				}
 			}
-		}
+//		}
 		
 		if let subViews = navSubviews {
 			for subView in subViews {

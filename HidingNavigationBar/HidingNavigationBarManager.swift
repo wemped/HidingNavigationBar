@@ -112,14 +112,15 @@ open class HidingNavigationBarManager: NSObject, UIScrollViewDelegate, UIGesture
 	
 	//MARK: Public methods
     
+    open func isExpanded() -> Bool {
+        return navBarController.isExpanded()
+    }
+    
     open func set(newScrollView: UIScrollView) {
         scrollView.removeGestureRecognizer(scrollViewPanGesture)
         scrollView = newScrollView
         scrollView.addGestureRecognizer(scrollViewPanGesture)
         previousYOffset = CGFloat.nan
-//        UIView.animate(withDuration: 0.1) { 
-//            self.expand()
-//        }
     }
 
 	open func manageBottomBar(_ view: UIView){
@@ -356,7 +357,7 @@ open class HidingNavigationBarManager: NSObject, UIScrollViewDelegate, UIGesture
 	}
 	
 	fileprivate func updateScrollContentInsetTop(_ top: CGFloat){
-        if viewController.automaticallyAdjustsScrollViewInsets {
+//        if viewController.automaticallyAdjustsScrollViewInsets {
             if let topConstraint = topConstraint {
                 let dy = topConstraint.constant - top
                 topConstraint.constant = top
@@ -368,7 +369,7 @@ open class HidingNavigationBarManager: NSObject, UIScrollViewDelegate, UIGesture
                 contentInset.top = top
                 scrollView.contentInset = contentInset
             }
-        }
+//        }
         var scrollInsets = scrollView.scrollIndicatorInsets
         scrollInsets.top = top
         scrollView.scrollIndicatorInsets = scrollInsets
@@ -417,9 +418,11 @@ open class HidingNavigationBarManager: NSObject, UIScrollViewDelegate, UIGesture
 			handleScrolling()
 		case .changed:
 			handleScrolling()
+        case .ended:
+            let velocity = gesture.velocity(in: scrollView).y
+            handleScrollingEnded(velocity)
 		default:
-			let velocity = gesture.velocity(in: scrollView).y
-			handleScrollingEnded(velocity)
+            break
 		}
 	}
 	
