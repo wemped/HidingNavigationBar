@@ -230,8 +230,9 @@ open class HidingNavigationBarManager: NSObject, UIScrollViewDelegate, UIGesture
 	func applicationWillEnterForeground() {
 		switch onForegroundAction {
 		case .show:
-			_ = navBarController.expand()
-			_ = tabBarController?.expand()
+            self.expand()
+//			_ = navBarController.expand()
+//			_ = tabBarController?.expand()
 		case .hide:
 			_ = navBarController.contract()
 			_ = tabBarController?.contract()
